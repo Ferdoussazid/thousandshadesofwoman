@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Thousand Shades of Women
+
+A women's accessories brand website built with **Next.js 14 (App Router)** and **Supabase**, designed for deployment on **Vercel**. The hero product line is signature sunglasses ("shades") designed for four ages of a woman's life — Teens, 20s–30s, 40s–50s, and 60+.
+
+## Features
+
+- **Home page** with brand hero, "Shades for Every Age" collections, and featured products
+- **Shop** with filtering by age collection and category (shades, jewelry, bags, scarves)
+- **Product detail pages** with related products
+- **Our Story** and **Contact** pages
+- **API routes** (`/api/products`, `/api/products/[slug]`, `/api/newsletter`, `/api/contact`) backed by Supabase
+- **Graceful fallback**: the site runs with a built-in catalogue when Supabase isn't configured, so you can develop and preview immediately
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Supabase Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Create a project at [supabase.com](https://supabase.com).
+2. Open the SQL editor and run `supabase/schema.sql` (creates `products`, `newsletter_subscribers`, and `contact_messages` tables with RLS policies, and seeds the catalogue).
+3. Copy `.env.example` to `.env.local` and fill in your project's URL and anon key (Project Settings → API):
 
-## Learn More
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
 
-To learn more about Next.js, take a look at the following resources:
+Without these variables the catalogue still renders from local data, but newsletter and contact submissions are not persisted.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploying to Vercel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Push this repository to GitHub.
+2. Import it at [vercel.com/new](https://vercel.com/new).
+3. Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` as environment variables.
+4. Deploy — Vercel auto-detects Next.js; no extra configuration needed.
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev` — start the dev server
+- `npm run build` — production build
+- `npm run lint` — ESLint
