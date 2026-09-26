@@ -6,23 +6,27 @@ import { formatDate, getAllStories, getStory } from "@/lib/stories";
 // One file renders every story. The [slug] folder name means
 // /stories/anything will land here, with params.slug = "anything".
 
-// Pre-build a page for each story at build time (fast, static pages)
-export function generateStaticParams() {
-  return getAllStories().map((s) => ({ slug: s.slug }));
+// Pre-build a page for each story at build time (fast, static pages).
+// Stories published later are rendered on first visit, then cached.
+export async function generateStaticParams() {
+  return (await getAllStories()).map((s) => ({ slug: s.slug }));
 }
+
+// Re-check Supabase at most once a minute, so edits and takedowns show up
+export const revalidate = 60;
 
 export async function generateMetadata({
   params,
 }: PageProps<"/stories/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const story = getStory(slug);
+  const story = await getStory(slug);
   if (!story) return {};
   return { title: story.title, description: story.excerpt };
 }
 
 export default async function StoryPage({ params }: PageProps<"/stories/[slug]">) {
   const { slug } = await params;
-  const story = getStory(slug);
+  const story = await getStory(slug);
   if (!story) notFound();
 
   return (
@@ -40,8 +44,8 @@ export default async function StoryPage({ params }: PageProps<"/stories/[slug]">
         {story.author} · {formatDate(story.date)}
       </p>
       <hr className="my-10 border-line" />
-      {/* The HTML comes from our own Markdown files, so it's safe to render.
-          Once users can submit stories, you'll need to sanitize it first. */}
+      {/* Only the team can publish stories right now, so this HTML is trusted.
+          Once users can submit stories (Phase 3), sanitize it before rendering. */}
       <div className="story-body" dangerouslySetInnerHTML={{ __html: story.html }} />
     </article>
   );

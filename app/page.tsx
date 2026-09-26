@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { CATEGORIES, getAllStories } from "@/lib/stories";
 import StoryCard from "./StoryCard";
+import WaitlistForm from "./WaitlistForm";
 
-export default function Home() {
-  const latest = getAllStories().slice(0, 3);
+// Re-check Supabase for new stories at most once a minute
+export const revalidate = 60;
+
+export default async function Home() {
+  const latest = (await getAllStories()).slice(0, 3);
 
   return (
     <>
@@ -59,7 +63,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Step 5: this becomes a real signup form once Supabase is connected */}
       <section className="mx-auto max-w-5xl px-4 pb-24">
         <div className="rounded-3xl bg-accent/10 p-8 sm:p-12">
           <h2 className="font-serif text-3xl font-semibold">
@@ -69,7 +72,7 @@ export default function Home() {
             Soon you&apos;ll be able to share your own shade. Join the waitlist to
             hear when submissions open.
           </p>
-          <p className="mt-6 text-sm text-muted">Waitlist signup: coming soon.</p>
+          <WaitlistForm />
         </div>
       </section>
     </>

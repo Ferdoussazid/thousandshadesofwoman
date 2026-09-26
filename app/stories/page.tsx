@@ -5,11 +5,12 @@ import StoryCard from "../StoryCard";
 
 export const metadata: Metadata = { title: "Stories" };
 
+export const revalidate = 60;
+
 // searchParams holds the "?category=..." part of the URL
 export default async function StoriesPage({ searchParams }: PageProps<"/stories">) {
   const { category } = await searchParams;
-  const all = getAllStories();
-  const stories = category ? all.filter((s) => s.category === category) : all;
+  const stories = await getAllStories(typeof category === "string" ? category : undefined);
 
   const pill = (active: boolean) =>
     `rounded-full border px-4 py-2 text-sm ${

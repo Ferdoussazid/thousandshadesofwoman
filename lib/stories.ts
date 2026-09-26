@@ -1,12 +1,11 @@
-import fs from "node:fs";
-import path from "node:path";
-import matter from "gray-matter";
+import { cache } from "react";
 import { marked } from "marked";
+import { supabase } from "./supabase";
 
-// Phase 1 reads stories from Markdown files.
-// In Phase 2 you'll swap these functions for Supabase queries,
-// and the pages that call them won't need to change much.
+// Stories live in the Supabase `stories` table (see supabase/migrations).
+// Only rows with status = 'published' are visible to the site.
 
+// Keep in sync with the story_category enum in supabase/migrations
 export const CATEGORIES = [
   "Career",
   "Motherhood",
@@ -29,36 +28,60 @@ export type StoryMeta = {
 
 export type Story = StoryMeta & { html: string };
 
-const STORIES_DIR = path.join(process.cwd(), "content/stories");
+const META_COLUMNS = "slug, title, author_name, category, excerpt, published_at";
 
-function readStoryFile(slug: string) {
-  const file = fs.readFileSync(path.join(STORIES_DIR, `${slug}.md`), "utf8");
-  // gray-matter splits the "front matter" (the --- block at the top) from the body
-  const { data, content } = matter(file);
-  const meta: StoryMeta = {
-    slug,
-    title: data.title,
-    author: data.author || "Anonymous",
-    category: data.category,
-    date: data.date instanceof Date ? data.date.toISOString().slice(0, 10) : String(data.date),
-    excerpt: data.excerpt,
+type StoryRow = {
+  slug: string;
+  title: string;
+  author_name: string;
+  category: Category;
+  excerpt: string;
+  published_at: string;
+};
+
+function toMeta(row: StoryRow): StoryMeta {
+  return {
+    slug: row.slug,
+    title: row.title,
+    author: row.author_name,
+    category: row.category,
+    date: row.published_at,
+    excerpt: row.excerpt,
   };
-  return { meta, content };
 }
 
-export function getAllStories(): StoryMeta[] {
-  return fs
-    .readdirSync(STORIES_DIR)
-    .filter((f) => f.endsWith(".md"))
-    .map((f) => readStoryFile(f.replace(/\.md$/, "")).meta)
-    .sort((a, b) => b.date.localeCompare(a.date)); // newest first
+export async function getAllStories(category?: string): Promise<StoryMeta[]> {
+  let query = supabase
+    .from("stories")
+    .select(META_COLUMNS)
+    .eq("status", "published")
+    .order("published_at", { ascending: false }); // newest first
+
+  if (category) {
+    // An unknown category would be rejected by the enum, so just return nothing
+    if (!CATEGORIES.includes(category as Category)) return [];
+    query = query.eq("category", category);
+  }
+
+  const { data, error } = await query.returns<StoryRow[]>();
+  if (error) throw new Error(`Couldn't load stories: ${error.message}`);
+  return data.map(toMeta);
 }
 
-export function getStory(slug: string): Story | null {
-  if (!fs.existsSync(path.join(STORIES_DIR, `${slug}.md`))) return null;
-  const { meta, content } = readStoryFile(slug);
-  return { ...meta, html: marked.parse(content, { async: false }) };
-}
+// cache() lets generateMetadata and the page share one query per request
+export const getStory = cache(async (slug: string): Promise<Story | null> => {
+  const { data, error } = await supabase
+    .from("stories")
+    .select(`${META_COLUMNS}, body`)
+    .eq("status", "published")
+    .eq("slug", slug)
+    .returns<(StoryRow & { body: string })[]>()
+    .maybeSingle();
+
+  if (error) throw new Error(`Couldn't load story "${slug}": ${error.message}`);
+  if (!data) return null;
+  return { ...toMeta(data), html: marked.parse(data.body, { async: false }) };
+});
 
 export function formatDate(date: string) {
   return new Date(date).toLocaleDateString("en-US", {

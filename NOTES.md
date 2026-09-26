@@ -17,27 +17,28 @@
 
 - [x] Project created (Next.js 16, TypeScript, Tailwind v4, ESLint)
 - [x] Pages: `/`, `/about`, `/guidelines`, `/stories` (filter with `?category=`), `/stories/[slug]`
-- [x] Stories are read from `content/stories/*.md` by `lib/stories.ts`
-- [x] 3 **placeholder** stories. Replace them with real ones before launch.
+- [x] Stories are read from the Supabase `stories` table by `lib/stories.ts` (only `status = 'published'` rows). Pages re-check every 60 seconds.
+- [x] 3 **placeholder** stories in `supabase/seed.sql`. Replace them with real ones before launch.
 - [x] Pushed to github.com/Ferdoussazid/thousandshadesofwoman (main tracks origin/main)
 - [ ] Decide what to do with the old accessories-shop PR #1 (Devin branch). It's a different concept and was left untouched.
 - [ ] Import the repo into Vercel and add the domain under Settings → Domains
-- [ ] Waitlist: a Supabase table plus a homepage signup form (currently shows "coming soon")
+- [x] Waitlist: `waitlist` table plus a homepage signup form (`app/WaitlistForm.tsx`, `app/actions.ts`)
+- [ ] Create the Supabase project, run the migration and seed, and add the env vars locally and in Vercel (see Supabase setup below)
+
+## Supabase setup
+
+1. Create a project at supabase.com.
+2. SQL Editor: run `supabase/migrations/20260926000000_init.sql`, then `supabase/seed.sql`.
+3. Copy `.env.example` to `.env.local` and fill in the URL and publishable key (Project Settings → API Keys). Add the same two variables in Vercel → Settings → Environment Variables.
+4. Restart `npm run dev`.
+
+Access rules (Row Level Security): the public key can read only published stories and can add emails to the waitlist, but can't read the waitlist. Everything else is done in the dashboard.
 
 ## Adding a story
 
-Copy a file in `content/stories/` and edit the front matter:
+In the Supabase dashboard (Table Editor → `stories`), insert a row: `slug` (lowercase-with-dashes, used in the URL), `title`, `author_name` (name, pen name, or Anonymous), `category`, `excerpt`, `body` (Markdown), `status = published`, and `published_at`. It appears on the site within a minute. To take a story down, set `status` to `removed`.
 
-```md
----
-title: "Story title"
-author: "Name, pen name, or Anonymous"
-category: "Career"   # must be one of the categories above
-date: "2026-09-26"
-excerpt: "One-sentence summary shown on cards."
----
-Story text in Markdown...
-```
+Waitlist signups are in Table Editor → `waitlist`.
 
 ## Commands
 
