@@ -1,26 +1,56 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fbf7f3;
+  --foreground: #2b2126;
+  --muted: #6f6168;
+  --accent: #b4436c;
+  --card: #ffffff;
+  --line: #eadfd8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1c1619;
+    --foreground: #f3ebe7;
+    --muted: #b3a5ab;
+    --accent: #e57fa3;
+    --card: #262024;
+    --line: #3a3035;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Typography for story bodies rendered from Markdown */
+.story-body p {
+  margin: 0 0 1.4em;
+  line-height: 1.85;
+  font-size: 1.125rem;
+}
+.story-body h2 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  margin: 2em 0 0.6em;
+}
+.story-body blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1.2em;
+  margin: 1.8em 0;
+  font-style: italic;
+  color: var(--muted);
 }
