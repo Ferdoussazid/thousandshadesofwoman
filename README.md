@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Thousand Shades of Women
 
-## Getting Started
+Real stories from real women, one shade at a time.
 
-First, run the development server:
+A storytelling platform where women share personal stories about career, motherhood, identity, and overcoming hardship. Each story is one "shade." Built with **Next.js (App Router)** and **Tailwind CSS**, deployed on **Vercel**. **Supabase** will be added in Phase 2.
+
+See [NOTES.md](NOTES.md) for the roadmap and current status.
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/
+  page.tsx                 homepage
+  about/page.tsx           mission
+  guidelines/page.tsx      privacy & content guidelines
+  stories/page.tsx         all stories (filter with ?category=)
+  stories/[slug]/page.tsx  a single story
+content/stories/           stories as Markdown files
+lib/stories.ts             reads and parses the stories
+```
 
-## Learn More
+## Git workflow
 
-To learn more about Next.js, take a look at the following resources:
+- `main` is what's live. Keep it working.
+- For each new feature, start a branch from an up-to-date `main`:
+  ```bash
+  git switch main
+  git pull
+  git switch -c feature/waitlist
+  ```
+- Commit as you go, then push the branch and open a pull request on GitHub:
+  ```bash
+  git push -u origin feature/waitlist
+  ```
+- After merging on GitHub, run `git switch main && git pull` to get the latest code.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev`: start the dev server
+- `npm run build`: production build
+- `npm run lint`: ESLint
