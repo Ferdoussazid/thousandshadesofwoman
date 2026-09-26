@@ -19,11 +19,8 @@
 - [x] Pages: `/`, `/about`, `/guidelines`, `/stories` (filter with `?category=`), `/stories/[slug]`
 - [x] Stories are read from `content/stories/*.md` by `lib/stories.ts`
 - [x] 3 **placeholder** stories. Replace them with real ones before launch.
-- [ ] Create the GitHub repo `thousandshadesofwomen` and push:
-  ```bash
-  git remote add origin https://github.com/<username>/thousandshadesofwomen.git
-  git push -u origin main
-  ```
+- [x] Pushed to github.com/Ferdoussazid/thousandshadesofwoman (main tracks origin/main)
+- [ ] Decide what to do with the old accessories-shop PR #1 (Devin branch). It's a different concept and was left untouched.
 - [ ] Import the repo into Vercel and add the domain under Settings → Domains
 - [ ] Waitlist: a Supabase table plus a homepage signup form (currently shows "coming soon")
 
