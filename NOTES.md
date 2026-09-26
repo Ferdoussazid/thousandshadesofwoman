@@ -21,9 +21,9 @@
 - [x] 3 **placeholder** stories in `supabase/seed.sql`. Replace them with real ones before launch.
 - [x] Pushed to github.com/Ferdoussazid/thousandshadesofwoman (main tracks origin/main)
 - [ ] Decide what to do with the old accessories-shop PR #1 (Devin branch). It's a different concept and was left untouched.
-- [ ] Import the repo into Vercel and add the domain under Settings → Domains
+- [x] Live on Vercel at https://www.thousandshadesofwoman.com (domain from Porkbun; the bare domain redirects to www). Pushes to `main` deploy automatically.
 - [x] Waitlist: `waitlist` table plus a homepage signup form (`app/WaitlistForm.tsx`, `app/actions.ts`)
-- [ ] Create the Supabase project, run the migration and seed, and add the env vars locally and in Vercel (see Supabase setup below)
+- [x] Supabase project created, migration and seed run, env vars set locally and in Vercel
 
 ## Supabase setup
 
