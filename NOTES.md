@@ -25,6 +25,14 @@
 - [x] Waitlist: `waitlist` table plus a homepage signup form (`app/WaitlistForm.tsx`, `app/actions.ts`)
 - [x] Supabase project created, migration and seed run, env vars set locally and in Vercel
 
+## Design
+
+- Light blush theme only (no dark mode), colors defined in `app/globals.css`: rose `accent`, plum `foreground`, `blush`/`petal` backgrounds, soft `gold` accents.
+- Fonts: Cormorant Garamond (headings), Jost (body), Pinyon Script (small script accents like "for every woman").
+- Photos are in `assets/images/`, from Unsplash (free license, no attribution required). Each story theme has its own photo in `lib/images.ts`; story cards and story headers use the photo for their theme.
+- `app/Reveal.tsx` fades sections in on scroll. All motion turns off for visitors who prefer reduced motion.
+- The homepage quote card ("I stopped waiting for permission.") is decorative. Swap it for a line from a real story once you have one.
+
 ## Supabase setup
 
 1. Create a project at supabase.com.

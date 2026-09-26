@@ -1,12 +1,19 @@
 @import "tailwindcss";
 
+/* Palette: blush, rose, plum, and a touch of soft gold.
+   One light theme for everyone, so the site always feels soft and warm. */
 :root {
-  --background: #fbf7f3;
-  --foreground: #2b2126;
-  --muted: #6f6168;
-  --accent: #b4436c;
-  --card: #ffffff;
-  --line: #eadfd8;
+  --background: #fdf6f4;
+  --foreground: #3d2433;
+  --muted: #7d6470;
+  --accent: #c2527a;
+  --accent-deep: #9c3a61;
+  --blush: #f7e1e6;
+  --petal: #fbeef0;
+  --mauve: #b88aa1;
+  --gold: #c9a26b;
+  --card: #fffafa;
+  --line: #efd9de;
 }
 
 @theme inline {
@@ -14,43 +21,91 @@
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
+  --color-blush: var(--blush);
+  --color-petal: var(--petal);
+  --color-mauve: var(--mauve);
+  --color-gold: var(--gold);
   --color-card: var(--card);
   --color-line: var(--line);
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
+  --font-script: var(--font-script);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1c1619;
-    --foreground: #f3ebe7;
-    --muted: #b3a5ab;
-    --accent: #e57fa3;
-    --card: #262024;
-    --line: #3a3035;
+@theme {
+  --animate-float: float 9s ease-in-out infinite;
+  --animate-float-slow: float 14s ease-in-out infinite;
+  --animate-drift: drift 22s ease-in-out infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-slow-zoom: slow-zoom 18s ease-out both;
+  --animate-fade-up: fade-up 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -20px) scale(1.06); }
+    66% { transform: translate(-20px, 15px) scale(0.96); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes slow-zoom {
+    from { transform: scale(1.08); }
+    to { transform: scale(1); }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: light;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  ::selection {
+    @apply bg-blush text-accent-deep;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Typography for story bodies rendered from Markdown */
-.story-body p {
-  margin: 0 0 1.4em;
-  line-height: 1.85;
-  font-size: 1.125rem;
-}
-.story-body h2 {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  margin: 2em 0 0.6em;
-}
-.story-body blockquote {
-  border-left: 3px solid var(--accent);
-  padding-left: 1.2em;
-  margin: 1.8em 0;
-  font-style: italic;
-  color: var(--muted);
+@layer components {
+  .story-body p {
+    @apply mb-6 text-lg leading-[1.9];
+  }
+  .drop-cap > p:first-of-type::first-letter {
+    @apply float-left mt-1 mr-3 font-serif text-7xl leading-[0.8] text-accent;
+  }
+  .story-body h2 {
+    @apply mt-12 mb-4 font-serif text-3xl font-semibold text-accent-deep;
+  }
+  .story-body blockquote {
+    @apply my-10 rounded-3xl border-l-4 border-accent bg-petal px-8 py-6 font-serif text-2xl leading-snug text-accent-deep italic;
+  }
+  .story-body blockquote p {
+    @apply m-0 text-2xl leading-snug;
+  }
+  .story-body a {
+    @apply text-accent underline decoration-blush underline-offset-4 hover:decoration-accent;
+  }
 }
