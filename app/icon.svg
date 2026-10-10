@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="brand-grad" gradientTransform="rotate(25)" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF5A20" />
+      <stop offset="100%" stop-color="#FFACC7" />
+    </linearGradient>
+  </defs>
+  <!-- Brand squircle container for high contrast across light and dark browser tab themes -->
+  <rect width="32" height="32" rx="7.2" fill="#FFE9E6" />
+  <!-- Brand upward triangle emblem -->
+  <path d="M7 24.3H25L16 8.7z" fill="url(#brand-grad)" />
+</svg>
+

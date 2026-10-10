@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Cormorant_Garamond, Jost, Pinyon_Script } from "next/font/google";
 import "./globals.css";
 
@@ -18,6 +19,16 @@ export const metadata: Metadata = {
     template: "%s · Thousand Shades",
   },
   description: "Real stories from real women, one shade at a time.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+      { url: "/favicon.ico", sizes: "32x32" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
 
 const NAV = [
@@ -26,13 +37,21 @@ const NAV = [
   { href: "/guidelines", label: "Guidelines" },
 ];
 
-function Logo() {
+function Logo({ className = "" }: { className?: string }) {
   return (
-    <Link href="/" className="group flex items-baseline gap-1.5 leading-none">
-      <span className="font-serif text-2xl font-semibold tracking-wide">Thousand Shades</span>
-      <span className="font-script text-2xl text-accent transition-colors group-hover:text-accent-deep">
-        of woman
-      </span>
+    <Link
+      href="/"
+      className={`group flex items-center transition-opacity hover:opacity-90 ${className}`}
+    >
+      <Image
+        src="/logo.svg"
+        alt="Thousand Shades of Woman"
+        width={245}
+        height={44}
+        priority
+        unoptimized
+        className="h-10 w-auto sm:h-12 object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+      />
     </Link>
   );
 }

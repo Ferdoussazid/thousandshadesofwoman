@@ -1,6 +1,6 @@
 "use server";
 
-import { supabase } from "@/lib/supabase";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 export type WaitlistState = { ok: boolean; message: string };
 
@@ -12,6 +12,10 @@ export async function joinWaitlist(
 
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || email.length > 254) {
     return { ok: false, message: "Please enter a valid email address." };
+  }
+
+  if (!isSupabaseConfigured) {
+    return { ok: true, message: "You're on the list. We'll email you when submissions open." };
   }
 
   const { error } = await supabase.from("waitlist").insert({ email });
