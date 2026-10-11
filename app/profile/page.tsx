@@ -39,6 +39,7 @@ export default async function ProfilePage() {
       <div className="relative mb-10 flex flex-wrap items-center justify-between gap-6 border-b border-line pb-8">
         <div className="flex items-center gap-5">
           {profile?.avatar_url ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
             <img
               src={profile.avatar_url}
               alt={displayName}
@@ -135,3 +136,4 @@ export default async function ProfilePage() {
     </div>
   );
 }
+

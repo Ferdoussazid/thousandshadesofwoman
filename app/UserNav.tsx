@@ -37,6 +37,7 @@ export default async function UserNav() {
         title="View profile"
       >
         {avatarUrl ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
           <img
             src={avatarUrl}
             alt={displayName}
@@ -63,3 +64,4 @@ export default async function UserNav() {
     </div>
   );
 }
+

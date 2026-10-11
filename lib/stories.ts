@@ -80,11 +80,22 @@ function toMeta(row: StoryRow): StoryMeta {
   };
 }
 
+function toFallbackMeta(s: StoryMeta & { body: string }): StoryMeta {
+  return {
+    slug: s.slug,
+    title: s.title,
+    author: s.author,
+    category: s.category,
+    date: s.date,
+    excerpt: s.excerpt,
+  };
+}
+
 export async function getAllStories(category?: string): Promise<StoryMeta[]> {
   if (!isSupabaseConfigured) {
     let list = FALLBACK_STORIES;
     if (category) list = list.filter((s) => s.category === category);
-    return list.map(({ body: _, ...meta }) => meta);
+    return list.map(toFallbackMeta);
   }
 
   try {
@@ -104,13 +115,13 @@ export async function getAllStories(category?: string): Promise<StoryMeta[]> {
     if (error || !data) {
       let list = FALLBACK_STORIES;
       if (category) list = list.filter((s) => s.category === category);
-      return list.map(({ body: _, ...meta }) => meta);
+      return list.map(toFallbackMeta);
     }
     return data.map(toMeta);
   } catch {
     let list = FALLBACK_STORIES;
     if (category) list = list.filter((s) => s.category === category);
-    return list.map(({ body: _, ...meta }) => meta);
+    return list.map(toFallbackMeta);
   }
 }
 

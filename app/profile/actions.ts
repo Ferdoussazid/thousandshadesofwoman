@@ -57,3 +57,4 @@ export async function updateProfile(
   revalidatePath("/profile");
   return { success: "Profile updated successfully!" };
 }
+
