@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { Cormorant_Garamond, Jost, Pinyon_Script } from "next/font/google";
+import UserNav from "./UserNav";
 import "./globals.css";
 
 const sans = Jost({ variable: "--font-sans", subsets: ["latin"] });
@@ -67,7 +68,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <header className="sticky top-0 z-50 border-b border-line/60 bg-background/75 backdrop-blur-md">
           <nav className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-4">
             <Logo />
-            <div className="flex items-center gap-5 text-sm tracking-wide text-muted sm:gap-7">
+            <div className="flex items-center gap-4 text-sm tracking-wide text-muted sm:gap-7">
               {NAV.map((item) => (
                 <Link
                   key={item.href}
@@ -77,12 +78,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                   {item.label}
                 </Link>
               ))}
-              <Link
-                href="/#waitlist"
-                className="hidden rounded-full bg-accent px-5 py-2 text-white shadow-sm shadow-accent/30 transition hover:-translate-y-0.5 hover:bg-accent-deep sm:inline-block"
-              >
-                Share your shade
-              </Link>
+              <UserNav />
             </div>
           </nav>
         </header>
