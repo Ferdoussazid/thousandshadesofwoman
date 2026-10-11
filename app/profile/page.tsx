@@ -61,10 +61,10 @@ export default async function ProfilePage() {
         </div>
 
         <Link
-          href="/#waitlist"
+          href="/write"
           className="rounded-full bg-accent px-6 py-2.5 text-sm font-medium tracking-wide text-white shadow-sm shadow-accent/30 transition hover:-translate-y-0.5 hover:bg-accent-deep"
         >
-          Share your story
+          Write a story
         </Link>
       </div>
 

@@ -5,28 +5,8 @@ import { supabase, isSupabaseConfigured } from "./supabase";
 // Stories live in the Supabase `stories` table (see supabase/migrations).
 // Only rows with status = 'published' are visible to the site.
 
-// Keep in sync with the story_category enum in supabase/migrations
-export const CATEGORIES = [
-  "Career",
-  "Motherhood",
-  "Identity",
-  "Health",
-  "Love & Loss",
-  "Starting Over",
-] as const;
-
-export type Category = (typeof CATEGORIES)[number];
-
-export type StoryMeta = {
-  slug: string;
-  title: string;
-  author: string; // a real name, a pen name, or "Anonymous"
-  category: Category;
-  date: string;
-  excerpt: string;
-};
-
-export type Story = StoryMeta & { html: string };
+import { CATEGORIES, type Category, type StoryMeta, type Story } from "./story-types";
+export { CATEGORIES, type Category, type StoryMeta, type Story };
 
 const META_COLUMNS = "slug, title, author_name, category, excerpt, published_at";
 
@@ -125,12 +105,22 @@ export async function getAllStories(category?: string): Promise<StoryMeta[]> {
   }
 }
 
+function sanitizeHtml(html: string): string {
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, "")
+    .replace(/\son\w+="[^"]*"/gi, "")
+    .replace(/\son\w+='[^']*'/gi, "")
+    .replace(/href="javascript:[^"]*"/gi, 'href="#"');
+}
+
 // cache() lets generateMetadata and the page share one query per request
 export const getStory = cache(async (slug: string): Promise<Story | null> => {
   if (!isSupabaseConfigured) {
     const found = FALLBACK_STORIES.find((s) => s.slug === slug);
     if (!found) return null;
-    return { ...found, html: marked.parse(found.body, { async: false }) as string };
+    return { ...found, html: sanitizeHtml(marked.parse(found.body, { async: false }) as string) };
   }
 
   try {
@@ -145,13 +135,13 @@ export const getStory = cache(async (slug: string): Promise<Story | null> => {
     if (error || !data) {
       const found = FALLBACK_STORIES.find((s) => s.slug === slug);
       if (!found) return null;
-      return { ...found, html: marked.parse(found.body, { async: false }) as string };
+      return { ...found, html: sanitizeHtml(marked.parse(found.body, { async: false }) as string) };
     }
-    return { ...toMeta(data), html: marked.parse(data.body, { async: false }) as string };
+    return { ...toMeta(data), html: sanitizeHtml(marked.parse(data.body, { async: false }) as string) };
   } catch {
     const found = FALLBACK_STORIES.find((s) => s.slug === slug);
     if (!found) return null;
-    return { ...found, html: marked.parse(found.body, { async: false }) as string };
+    return { ...found, html: sanitizeHtml(marked.parse(found.body, { async: false }) as string) };
   }
 });
 

@@ -32,6 +32,13 @@ export default async function UserNav() {
   return (
     <div className="flex items-center gap-3 sm:gap-4">
       <Link
+        href="/write"
+        className="rounded-full bg-accent px-4 py-1.5 text-xs font-medium tracking-wide text-white shadow-xs transition hover:-translate-y-0.5 hover:bg-accent-deep"
+      >
+        Write
+      </Link>
+
+      <Link
         href="/profile"
         className="group flex items-center gap-2.5 rounded-full border border-line bg-card/60 py-1 pl-1 pr-3 shadow-xs transition hover:border-accent/40 hover:bg-white"
         title="View profile"
@@ -56,7 +63,7 @@ export default async function UserNav() {
       <form action={signOut}>
         <button
           type="submit"
-          className="rounded-full px-3 py-1.5 text-xs font-medium text-muted transition hover:bg-petal hover:text-accent-deep"
+          className="rounded-full px-3 py-1.5 text-xs font-medium text-muted transition hover:bg-petal hover:text-accent-deep cursor-pointer"
         >
           Sign out
         </button>

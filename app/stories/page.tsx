@@ -74,10 +74,10 @@ export default async function StoriesPage({ searchParams }: PageProps<"/stories"
             <p className="mt-3 font-serif text-2xl">No stories in this theme yet.</p>
             <p className="mt-2 text-muted">Yours could be the very first.</p>
             <Link
-              href="/#waitlist"
+              href="/write"
               className="mt-8 inline-block rounded-full bg-accent px-7 py-3 font-medium text-white shadow-md shadow-accent/25 transition hover:-translate-y-0.5 hover:bg-accent-deep"
             >
-              Join the waitlist
+              Write this story
             </Link>
           </Reveal>
         )}
